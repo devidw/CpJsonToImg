@@ -1,0 +1,3 @@
+= CpJsonToImg
+
+Convert Adobe Captivate bundeld JSON images back to their source files
