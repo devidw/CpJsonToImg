@@ -2,6 +2,8 @@
 
 /**
  * Convert Adobe Captivate bundeld JSON images back to their source files
+ * 
+ * @author David Wolf <david@wolf.gdn>
  */
 class CpJsonToImg
 {
@@ -78,6 +80,9 @@ class CpJsonToImg
         if (json_last_error()) {
             throw new Exception("JSON error");
         }
+        if (array_key_exists('___', $array)) {
+            unset($array['___']);
+        }
         return $array;
     }
 
@@ -87,7 +92,6 @@ class CpJsonToImg
     public function loadMap()
     {
         $map = $this->loadJson($this->mapPath);
-        array_pop($map); // fix "___":"___"
         return $map;
     }
 
