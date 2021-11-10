@@ -30,7 +30,7 @@ class CpJsonToImg
     }
 
     /**
-     * 
+     * convert all sources in bulk
      */
     public function convert()
     {
@@ -40,7 +40,10 @@ class CpJsonToImg
     }
 
     /**
-     * 
+     * convert a single image and write its contents to the file system
+     * @param string $filename
+     * @param string $base64
+     * @return
      */
     public function writeImg(string $filename, string $base64)
     {
@@ -52,10 +55,9 @@ class CpJsonToImg
 
     /**
      * @param string $path
-     * 
-     * @return string|Exception
+     * @return string
      */
-    private function fileCheck(string $path)
+    private function fileCheck(string $path): string
     {
         if (!file_exists($path)) {
             throw new Exception("$path does not exist");
@@ -68,8 +70,9 @@ class CpJsonToImg
 
     /**
      * @param string $path
+     * @return array
      */
-    public function loadJson(string $path)
+    public function loadJson(string $path): array
     {
         $path = $this->fileCheck($path);
         $js = file_get_contents($path);
@@ -87,9 +90,9 @@ class CpJsonToImg
     }
 
     /**
-     * @return object|Exception
+     * @return array
      */
-    public function loadMap()
+    public function loadMap(): array
     {
         $map = $this->loadJson($this->mapPath);
         return $map;
@@ -97,10 +100,9 @@ class CpJsonToImg
 
     /**
      * @param string $path
-     * 
-     * @return array|Exception
+     * @return array
      */
-    public function loadSources()
+    public function loadSources(): array
     {
         $sources = [];
         $sourcPaths = glob($this->readPath . DIRECTORY_SEPARATOR  . 'img*.json');
