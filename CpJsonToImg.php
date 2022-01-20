@@ -1,19 +1,44 @@
 <?php
 
 /**
+ * Captivate JSON to Image Converter
  * Convert Adobe Captivate bundeld JSON images back to their source files
  * 
- * @author David Wolf <david@wolf.gdn>
+ * @version 0.0.2
  */
 class CpJsonToImg
 {
-    public $readPath;
-    public $writePath;
-    public $mapPath;
-    public $map;
-    public $sources;
-    
     /**
+     * The directory to read the JSON files from
+     * 
+     * @var string
+     */
+    public $readPath;
+
+    /**
+     * The directory to write the image files to
+     * 
+     * @var string
+     */
+    public $writePath;
+
+    /**
+     * The directory of the map file
+     * 
+     * @var string
+     */
+    public $mapPath;
+
+    /**
+     * The image sources to convert
+     * 
+     * @var array
+     */
+    public $sources;
+
+    /**
+     * Constructor
+     * 
      * @param string $readPath
      * @param string $writePath
      */
@@ -23,37 +48,14 @@ class CpJsonToImg
         $this->writePath = $this->fileCheck($writePath);
 
         $mapPath = $this->readPath . DIRECTORY_SEPARATOR . 'imgmd.json';
-        $this->mapPath =$this->fileCheck($mapPath);
+        $this->mapPath = $this->fileCheck($mapPath);
 
-        // $this->map = $this->loadMap();
         $this->sources = $this->loadSources();
     }
 
     /**
-     * convert all sources in bulk
-     */
-    public function convert()
-    {
-        foreach ($this->sources as $filename => $base64) {
-            $this->writeImg($filename, $base64);
-        }
-    }
-
-    /**
-     * convert a single image and write its contents to the file system
-     * @param string $filename
-     * @param string $base64
-     * @return
-     */
-    public function writeImg(string $filename, string $base64)
-    {
-        $binary = base64_decode($base64);
-        $imgPath = $this->writePath . DIRECTORY_SEPARATOR . basename($filename);
-        $written = file_put_contents($imgPath, $binary);
-        return $written;
-    }
-
-    /**
+     * Check if a file exists and is readable
+     * 
      * @param string $path
      * @return string
      */
@@ -69,10 +71,12 @@ class CpJsonToImg
     }
 
     /**
+     * Load a josn file and prepare its contents for decoding
+     * 
      * @param string $path
      * @return array
      */
-    public function loadJson(string $path): array
+    private function loadJson(string $path): array
     {
         $path = $this->fileCheck($path);
         $js = file_get_contents($path);
@@ -81,7 +85,7 @@ class CpJsonToImg
         // echo $map; die;
         $array = json_decode($json, true);
         if (json_last_error()) {
-            throw new Exception("JSON error");
+            throw new Exception('JSON error');
         }
         if (array_key_exists('___', $array)) {
             unset($array['___']);
@@ -90,19 +94,11 @@ class CpJsonToImg
     }
 
     /**
+     * Load the bundled image JSON's and its iamge sources
+     * 
      * @return array
      */
-    public function loadMap(): array
-    {
-        $map = $this->loadJson($this->mapPath);
-        return $map;
-    }
-
-    /**
-     * @param string $path
-     * @return array
-     */
-    public function loadSources(): array
+    private function loadSources(): array
     {
         $sources = [];
         $sourcPaths = glob($this->readPath . DIRECTORY_SEPARATOR  . 'img*.json');
@@ -111,5 +107,32 @@ class CpJsonToImg
             $sources += $this->loadJson($path);
         }
         return $sources;
+    }
+
+    /**
+     * Convert a single image and write its contents to the file system
+     * 
+     * @param string $filename
+     * @param string $base64
+     * @return int|false
+     */
+    private function writeImg(string $filename, string $base64): ?int
+    {
+        $binary = base64_decode($base64);
+        $imgPath = $this->writePath . DIRECTORY_SEPARATOR . basename($filename);
+        $written = file_put_contents($imgPath, $binary);
+        return $written;
+    }
+
+    /**
+     * Convert all sources in bulk
+     * 
+     * @return void
+     */
+    public function convert(): void
+    {
+        foreach ($this->sources as $filename => $base64) {
+            $this->writeImg($filename, $base64);
+        }
     }
 }

@@ -1,3 +1,19 @@
 = CpJsonToImg
 
 Convert Adobe Captivate bundeld JSON images back to their source files
+
+Here is how to use the link:./CpJsonToImg.php[class]:
+
+[source,php]
+----
+<?php
+
+require_once(dirname(__DIR__) . '/CpJsonToImg.php');
+
+$cpJsonToImg = new CpJsonToImg(
+    __DIR__ . '/dr',
+    __DIR__ . '/dr/out'
+);
+
+$cpJsonToImg->convert();
+----
