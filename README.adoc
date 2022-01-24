@@ -1,14 +1,19 @@
 = CpJsonToImg
 
-Convert Adobe Captivate bundeld JSON images back to their source files
+Convert Adobe Captivate bundeld JSON images back to their original source files.
 
-Here is how to use the link:./CpJsonToImg.php[class]:
+== Installation
+[source,zsh]
+----
+composer require devidw/cp-json-to-img
+----
 
+== Usage
 [source,php]
 ----
 <?php
 
-require_once(dirname(__DIR__) . '/CpJsonToImg.php');
+require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 $cpJsonToImg = new CpJsonToImg(
     __DIR__ . '/dr',

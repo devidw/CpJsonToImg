@@ -1,10 +1,12 @@
 <?php
 
+namespace Devidw\CpJsonToImg;
+
 /**
  * Captivate JSON to Image Converter
  * Convert Adobe Captivate bundeld JSON images back to their source files
  * 
- * @version 0.0.2
+ * @version 1.0.0
  */
 class CpJsonToImg
 {

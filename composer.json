@@ -1,0 +1,14 @@
+{
+    "name": "devidw/cp-json-to-img",
+    "description": "Convert Adobe Captivate bundeld JSON images back to their original source files.",
+    "require": {
+        "php": ">=7.4.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Devidw\\CpJsonToImg\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
